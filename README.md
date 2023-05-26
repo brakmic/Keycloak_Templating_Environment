@@ -1,12 +1,16 @@
 # Keycloak Templating Environment
 
-* Load own templates.
+* Load your own templates
 
 ![keycloak_templating_showcase](./gifs/keycloak_templating_showcase.gif)
 
-* Edit templates on the fly.
+* Edit templates on the fly
 
 ![ui_on-the-fly](gifs/ui_on-the-fly.gif)
+
+* Send Keycloak emails locally
+
+![forgot_password](gifs/forgot_password.gif)
 
 ## Usage
 
@@ -23,7 +27,7 @@
 ![kc_main_page](images/kc_main_page.png)
 
 * In the console select `test-realm`
-* Then select `Users` in the sidebar and click `Add user` button to open the form for adding new users
+* Select `Users` in the sidebar and click `Add user` button to open the form for adding new users
 
 ![create_new_user](./images/create_new_user.png) 
 
@@ -34,8 +38,8 @@
 
 ![user_settings](images/add_new_user.png)
 
-* Create a password under `Credentials`.
-> Click `Set password`.
+* Create a password under `Credentials`
+> Click `Set password`
 > 
 > In the dialog, type in the password two times.
 > 
@@ -129,7 +133,7 @@ The templating environment uses the following services:
 > 
 > **Keycloak** runs in production mode but with caching disabled to make design changes immediately visible.
 >
-> **Web application cotnainer** can run: 
+> **Web application container** can run: 
 > * an Angular app
 > * or a simple HTML page that executes a [script](./web-app_simple/kc-client.js)
 ---
@@ -157,16 +161,16 @@ The templating environment uses the following services:
 
 ### Watcher
 
-**Watcher** service is used to watch over the `themes` directory and restart Keycloak each time it gets changed.This way one can introduce new themes without needing to restart everything manually.
+**Watcher** service is used to watch over the `themes` directory and restart Keycloak each time it gets changed. This way one can introduce new themes without manual restarts.
 
 ### MailDev
 
-**MailDev** is a service for mimicking e-mail delivery. This is especially useful when testing Keycloak's `forgot password` functionality.
+**MailDev** is a service for mimicking e-mail delivery. This is especially useful when testing Keycloak's `forgot password` and similar functionalities.
 
 
 ### CertSetup
 
-**CertSetup** generates certificates and keystores for Keycloak. It stops automatically after successful completion.
+**CertSetup** generates certificates and keystores for Keycloak. It stops automatically after a successful completion.
 
 ---
 
