@@ -1,8 +1,14 @@
 # Keycloak Templating Environment
 
+* Load own templates.
+
 ![keycloak_templating_showcase](./gifs/keycloak_templating_showcase.gif)
 
-#### Usage
+* Edit templates on the fly.
+
+![ui_on-the-fly](gifs/ui_on-the-fly.gif)
+
+## Usage
 
 * Install Docker on your host machine
 * Depending on what web app you prefer run:
