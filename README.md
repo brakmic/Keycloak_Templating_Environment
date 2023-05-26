@@ -1,4 +1,6 @@
-# Keycloak Theming Environment
+# Keycloak Templating Environment
+
+![keycloak_templating_showcase](./gifs/keycloak_templating_showcase.gif)
 
 #### Usage
 
