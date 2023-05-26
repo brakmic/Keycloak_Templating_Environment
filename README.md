@@ -70,6 +70,8 @@
 
 ![maildev_ui](images/maildev_ui.png)
 
+* Select `test-realm` and change its Email settings as well.
+
 * Now go to web app and logon as user you setup previously.
 > Depending on web app variant this can either be https://localhost:4200 or http://localhost:8080
 
