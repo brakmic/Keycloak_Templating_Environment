@@ -59,7 +59,7 @@
 
 ![maildev_test_success](images/maildev_test_success.png)
 
-* Now open *MailDev* server on http://localhost:1080. 
+* Now open *MailDev* server on http://localhost:1080
 > You should see a test email like this:
 
 ![maildev_ui](images/maildev_ui.png)
@@ -101,55 +101,68 @@ Additionally, Keycloak instances defined in [docker-compose.yml](docker-compose.
 ```
 ## Test Realm
 
-The Keycloak instance automatically imports a `test-realm` from a JSON file can be found [here](./import/test-realm.json). Feel free to create own realms but don't forget to introduce them in Keycloak's import flag in [docker-compose.yaml](./docker-compose.yml). Also take into account that users must always be defined manually as realm JSONs only contain realm's data, not user's.
+The Keycloak instance automatically imports a `test-realm` from [this JSON file](./import/test-realm.json). Feel free to create your own realms but don't forget to make them [visible](https://github.com/brakmic/Keycloak_Templating_Environment/blob/main/docker-compose.yml#L56) to Keycloak. Also take into account that users must be created manually as realm JSONs don't contain user data.
 
 ## Docker Containers
 
-The services used in this environment are:
+The templating environment uses the following services:
 
 * PostgreSQL
 * Keycloak
-* Web (Angular & simple)
+* Web container (Angular or HTML)
 * MailDev
 * Watcher
 * CertSetup
 ---
 
-> **Postgresql** is used by Keycloak and doesn't need any manual configuration. Just leave it as it is.
-
+> *Notice*: 
+> 
+> **Postgresql** is controlled by Keycloak and doesn't need any manual configuration. Just leave it as it is.
+> 
 > **Keycloak** runs in production mode but with caching disabled to make design changes immediately visible.
-
-> **Web application** can either be: 
+>
+> **Web application cotnainer** can run: 
 > * an Angular app
 > * or a simple HTML page that executes a [script](./web-app_simple/kc-client.js)
 ---
-> * To start Angular app use `--profile angular` when invoking `docker compose`
+> To start Angular app use `--profile angular` when invoking `docker compose`
+> 
+> The app will look like this:
 
 ![angular_profile](images/angular_profile.png)
 
-> * To start HTML page use `--profile web-simple` instead.
+> To start HTML page use `--profile web-simple` instead.
+>
+> It will look like this:
 
 ![web_simple](images/web-simple.png)
 
-> If you want to use your own web app then just run `docker compose up -d` which will start without any web app.
+> *Hint*:
+>  
+> If you want to use your own web app then just run `docker compose up -d`
+>
+> Neither app will be started.
+>
+> *Notice*: Angular app runs over SSL by default.
+>
+> To create new TLS certs, check the [HOWTO](./web-app/ssl/HOWTO.md) in `webapp/ssl` folder.
+
+### Watcher
+
+**Watcher** service is used to watch over the `themes` directory and restart Keycloak each time it gets changed.This way one can introduce new themes without needing to restart everything manually.
+
+### MailDev
+
+**MailDev** is a service for mimicking e-mail delivery. This is especially useful when testing Keycloak's `forgot password` functionality.
+
+
+### CertSetup
+
+**CertSetup** generates certificates and keystores for Keycloak. It stops automatically after successful completion.
 
 ---
 
-*Notice:* Angular app runs over SSL by default.
-
-To create new TLS certs, check the [HOWTO](./web-app/ssl/HOWTO.md) in `webapp/ssl` folder.
-
-> **Watcher** service is used to watch over the `themes` directory and restart Keycloak each time it gets changed.
-
-
-> **MailDev** is a service for mimicking e-mail delivery. This is especially useful when testing Keycloak's `forgot password` functionality.
-
-
-> **CertSetup** generates certificates and keystores for Keycloak. It stops automatically after successful completion.
-
----
-
-#### Themes
+### Themes
 
 The folder `themes` is a docker volume that can be accessed by Keycloak. To introduce a new theme just copy its folder to this volume. The Watcher will then restart the Keycloak instance to make it available in `Realm Settings`.
 
