@@ -11,23 +11,43 @@
    > `docker-compose --profile web-simple up -d`
    
 * Alternatively, run it "headless" with `docker compose up -d`. Then hook up your own web app.
-* Open [https://localhost:8443](https://localhost:8443) and then go to Keycloak admin console. Use `admin` and `password` as your credentials.
+* Open [https://localhost:8443](https://localhost:8443) and select `Administration Console`.
+* Use `admin` and `password` as credentials.
 
 ![kc_main_page](images/kc_main_page.png)
 
-* In the admin console select `test-realm` and then go to `Users` to add a new one. 
+* In the console select `test-realm`
+* Then select `Users` in the sidebar and click `Add user` button to open the form for adding new users
 
 ![create_new_user](./images/create_new_user.png) 
 
-* Assign it a password under `Credentials` and an email. The email can be anything as long as it's a valid email. Also select `Email verified` to complete the task.
+* Provide user name, email, first name, last name.
+  > The email can be anything as long as it's a valid one.
 
-![user_settings](images/user_settings.png)
+  > Select `Email verified` to complete the task.
 
-* Then select `master` realm and add an email for your admin user (again, it can be anything, just select `Email verified` afterwards)
+![user_settings](images/add_new_user.png)
+
+* Create a password under `Credentials`.
+> Click `Set password`.
+> 
+> In the dialog, type in the password two times.
+> 
+> Deselect option `Temporary` to prevent password change after first login.
+>
+> Confirm new password.
+  
+![add_credentials](images/add_credentials.png)
+
+![set_password](images/set_password.png)
+
+![set_password_confirm](images/set_password_confirm.png)
+
+* Now select `master` realm and add an email for your admin user (again, it can be anything, just select `Email verified` afterwards)
 
 ![admin_settings](images/admin_settings.png)
   
-* Now go to `master` realm's settings and under the tab **Email** set `From` and `Host` to this:
+* Then go to `master` realm's settings and under the tab **Email** set `From` and `Host` fields as shown below:
 
 ![maildev_settings](images/maildev_settings.png)
 
@@ -39,11 +59,13 @@
 
 ![maildev_test_success](images/maildev_test_success.png)
 
-* Now open *MailDev* server on http://localhost:1080. You should see the test email in the list:
+* Now open *MailDev* server on http://localhost:1080. 
+> You should see a test email like this:
 
 ![maildev_ui](images/maildev_ui.png)
 
 * Now go to web app and logon as user you setup previously.
+> Depending on web app variant this can either be https://localhost:4200 or http://localhost:8080
 
 ![login_form](./images/login_form.png)
 
