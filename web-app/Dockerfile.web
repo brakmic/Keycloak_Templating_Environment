@@ -1,0 +1,36 @@
+# Stage 1: Build the angular app
+FROM node:18-alpine as build
+
+# Define a variable for the app root directory
+ENV APP_ROOT=.
+
+WORKDIR /app
+
+# Install pnpm to be used instead of npm
+RUN npm i -g pnpm
+
+# Copy package files
+COPY ${APP_ROOT}/package.json ${APP_ROOT}/pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
+
+# Copy the necessary files
+COPY ${APP_ROOT}/src ./src
+COPY ${APP_ROOT}/angular.json .
+COPY ${APP_ROOT}/tsconfig* ./
+
+RUN pnpm run build
+
+# Stage 2: Serve the app with nginx
+FROM nginx:alpine
+
+# Copy from build stage to nginx html directory
+COPY --from=build /app/dist/web-app/* /usr/share/nginx/html/
+
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./ssl/server.crt /etc/nginx/certs/tls.crt
+COPY ./ssl/server.key /etc/nginx/certs/tls.key
+
+EXPOSE 443
+
+CMD ["nginx", "-g", "daemon off;"]

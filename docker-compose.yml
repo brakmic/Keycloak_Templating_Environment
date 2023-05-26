@@ -1,0 +1,146 @@
+version: "3"
+
+services:
+  watcher:
+      build: 
+        context: ./watcher
+        dockerfile: Dockerfile.watcher
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ./themes:/themes
+      depends_on:
+        - keycloak
+  web:
+    build:
+      context: ./web-app
+      dockerfile: Dockerfile.web
+    ports:
+     - 4200:443
+    networks:
+      - web_network
+    depends_on:
+      - keycloak
+    profiles:
+      - angular
+
+  web-simple:
+    build:
+      context: ./web-app_simple
+      dockerfile: Dockerfile.web
+    ports:
+     - 8080:80
+    networks:
+      - web_network
+    depends_on:
+      - keycloak
+    profiles:
+      - web-simple
+      
+  postgresql:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+      POSTGRES_PORT: 5432
+    networks:
+      - postgresql_network
+    volumes:
+      - postgres-data:/var/lib/postgresql-data
+      - postgres-volume:/home
+
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    volumes:
+      - ./themes:/opt/keycloak/themes
+      - ./import/test-realm.json:/opt/keycloak/data/import/test-realm.json
+      - https:/etc/x509/https:ro
+    command: 
+      - start
+      - --optimized
+      - --hostname=localhost
+      - --hostname-strict-backchannel=true
+      - --https-certificate-file=/etc/x509/https/tls.crt
+      - --https-certificate-key-file=/etc/x509/https/tls.key
+      - --https-key-store-file=/etc/x509/https/keystore.jks
+      - --https-key-store-password=password
+      - --https-key-store-type=JKS
+      - --import-realm
+      - --spi-theme-static-max-age=-1
+      - --spi-theme-cache-themes=false
+      - --spi-theme-cache-templates=false
+      - --verbose
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_SCHEMA: public
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      DB_PORT: 5432
+      QUARKUS_HTTP_HOST: 0.0.0.0
+      KEYCLOAK_FRONTEND_URL: https://localhost:8443
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    ports:
+      - 8443:8443
+    networks:
+      - keycloak_network
+    depends_on:
+      - postgresql
+      - maildev
+      - cert-setup
+      
+  maildev:
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+    environment:
+      MAILDEV_SMTP_PORT: 25
+    networks:
+      - keycloak_network
+      - maildev_network
+
+  cert-setup:
+    image: alpine
+    volumes:
+      - https:/etc/x509/https
+      - ./certs/certificate.cnf:/etc/ssl/certificate.cnf
+    command:
+      - /bin/sh
+      - -c
+      - |
+        apk add --no-cache openssl openjdk8 && \
+        openssl req -x509 -nodes \
+        -days 365 \
+        -newkey rsa:2048 \
+        -keyout /etc/x509/https/tls.key \
+        -out /etc/x509/https/tls.crt \
+        -config /etc/ssl/certificate.cnf \
+        -subj '/CN=localhost' \
+        && openssl pkcs12 -export \
+        -in /etc/x509/https/tls.crt \
+        -inkey /etc/x509/https/tls.key \
+        -out /etc/x509/https/keystore.p12 \
+        -name localhost \
+        -password pass:password \
+        && keytool -importkeystore \
+        -srckeystore /etc/x509/https/keystore.p12 \
+        -srcstoretype pkcs12 \
+        -destkeystore /etc/x509/https/keystore.jks \
+        -deststoretype jks \
+        -storepass password \
+        -srcstorepass password \
+        -noprompt \
+        && chmod 644 /etc/x509/https/tls.* \
+        && chmod 644 /etc/x509/https/keystore.*
+
+volumes:
+    postgres-volume:
+    postgres-data:
+    https:
+networks:
+  web_network:
+  maildev_network:
+  postgresql_network:
+  keycloak_network:

@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 60px);
+  background-color: #f0f0f0;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.card-container {
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+}
+
+.profile-card {
+  margin: 2rem 0;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.header-image {
+  background-color: #3f51b5;
+  height: 80px;
+  width: 80px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  
+  @media (max-width: 768px) {
+    height: 60px;
+    width: 60px;
+  }
+}
+
+mat-card-title, mat-card-subtitle {
+  color: #333333 !important;
+  
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+}
+
+mat-list-item ::ng-deep span {
+  color: #333333 !important;
+  
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+}

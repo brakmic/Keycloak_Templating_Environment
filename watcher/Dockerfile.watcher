@@ -1,0 +1,6 @@
+FROM alpine:latest
+
+RUN apk add --no-cache inotify-tools docker-cli
+COPY watcher.sh /watcher.sh
+
+ENTRYPOINT ["/bin/sh", "/watcher.sh"]

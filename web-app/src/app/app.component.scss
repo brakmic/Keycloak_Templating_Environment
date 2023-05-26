@@ -1,0 +1,10 @@
+mat-toolbar {
+  position: fixed; 
+  top: 0; 
+  width: 100%; 
+  z-index: 1;
+}
+
+router-outlet {
+  margin-top: 64px;
+}

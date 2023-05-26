@@ -1,0 +1,23 @@
+<div class="container" *ngIf="isLoggedIn">
+  <div class="card-container">
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <div
+          mat-card-avatar
+          class="header-image"
+          [style.background-image]="'url(' + profilePictureUrl + ')'"
+        ></div>
+        <mat-card-title>{{ name }}</mat-card-title>
+        <mat-card-subtitle>{{ username }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>User name: {{ username }}</p>
+        <p>Email: {{ email }}</p>
+        <p>Full Name: {{ name }}</p>
+        <p>Given Name: {{ givenName }}</p>
+        <p>Family Name: {{ familyName }}</p>
+        <p>Email Verified: {{ emailVerified }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
