@@ -141,13 +141,13 @@ The templating environment uses the following services:
 > 
 > The app will look like this:
 
-![angular_profile](images/angular_profile.png)
+![using_angular_app](gifs/using_angular_app.gif)
 
 > To start HTML page use `--profile web-simple` instead.
 >
 > It will look like this:
 
-![web_simple](images/web-simple.png)
+![using_html_app](gifs/using_html_app.gif)
 
 > *Hint*:
 >  
