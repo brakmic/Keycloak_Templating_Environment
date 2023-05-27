@@ -1,4 +1,6 @@
-# Keycloak Templating Environment
+# Keycloak Templating Environment 
+
+## Features
 
 * Load your own templates
 
@@ -11,6 +13,10 @@
 * Send Keycloak emails locally
 
 ![forgot_password](gifs/forgot_password.gif)
+
+## Article
+
+Visit [this url](https://blog.brakmic.com/keycloak-templating) to read the original article.
 
 ## Usage
 
